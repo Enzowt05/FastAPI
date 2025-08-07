@@ -1,18 +1,18 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 
 from storeapi.models.post import UserPost, UserPostIn
 
-app = FastAPI()
+router = APIRouter()
 
 post_table = {}
 
 
-@app.get("/post", response_model=list[UserPost])
+@router.get("/post", response_model=list[UserPost])
 async def get_all_posts():
     return list(post_table.values())
 
 
-@app.post("/post", response_model=UserPost)
+@router.post("/post", response_model=UserPost)
 async def create_post(post: UserPostIn):
     data = post.model_dump()
     last_record_id = len(post_table)
