@@ -8,4 +8,3 @@ venv
 start.txt
 *.png
 storeapi.log
-**/logging_conf.py
