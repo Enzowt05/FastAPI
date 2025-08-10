@@ -22,6 +22,7 @@ def configure_logging() -> None:
                 }
             },
             "loggers": {
+                "uvicorn": {"handlers": ["default"], "level": "INFO"},
                 "storeapi" :{
                     "handlers": ["default"],
                     "level": "DEBUG" if isinstance(config, DevConfig) else "INFO",
