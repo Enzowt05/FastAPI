@@ -12,7 +12,7 @@ This project, hosted at [Enzowt05/FastAPI](https://github.com/Enzowt05/FastAPI),
 - ✅ Full CRUD operations with database persistence
 - ✅ Automatic validation using Pydantic
 - ✅ Interactive API documentation (Swagger UI with OpenAPI)
-
+- ✅ Advanced logging with Rich for colored, readable logs
 ---
 
 ## 🧠 Learning Outcomes
@@ -25,6 +25,7 @@ This project highlights best practices and enables you to:
 - Ensure robust input/output validation with Pydantic
 - Manage environment variables securely (`python-dotenv`)
 - Run production-grade local server via Uvicorn with live reload
+- Improve debugging and monitoring with Rich-based logging
 
 ---
 
@@ -35,7 +36,8 @@ This project highlights best practices and enables you to:
 - **SQLAlchemy / SQLModel** — ORM layers for database interaction  
 - **PostgreSQL** — relational database engine  
 - **Pydantic** — input/output data validation and settings management  
-- **PyJWT** — handling JSON Web Token-based authentication  
+- **PyJWT** — handling JSON Web Token-based authentication
+- **Rich** — beautiful and structured terminal logging
 
 ---
 
