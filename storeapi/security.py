@@ -1,12 +1,12 @@
 import logging
 
-from passlib import CryptContext
+from passlib.context import CryptContext
 
 from storeapi.database import database, user_table
 
 logger = logging.getLogger(__name__)
 
-pwd_context = CryptContext(schemes=["bycript"])
+pwd_context = CryptContext(schemes=["bcrypt"])
 
 
 def get_password_hash(password: str) -> str:
