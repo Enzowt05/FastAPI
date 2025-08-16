@@ -14,6 +14,8 @@ class GlobalConfig(BaseConfig):
     DB_FORCE_ROLL_BACK: bool = False
     LOGTAIL_API_KEY: Optional[str] = None
     ROTATING_FILE: Optional[bool] = False
+    SECRET_KEY: Optional[str] = None
+    ALGORITHM: Optional[str] = None
 
 
 class DevConfig(GlobalConfig):
