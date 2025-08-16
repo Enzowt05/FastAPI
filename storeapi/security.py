@@ -1,6 +1,7 @@
 import datetime
 import logging
 
+from fastapi import HTTPException, status
 from jose import jwt
 from passlib.context import CryptContext
 
@@ -13,6 +14,10 @@ pwd_context = CryptContext(schemes=["bcrypt"])
 
 SECRET_KEY = config.SECRET_KEY
 ALGORITHM = config.ALGORITHM
+
+credentials_exception = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials"
+)
 
 
 def acess_token_expire_minutes() -> int:
@@ -43,3 +48,13 @@ async def get_user(email: str):
     result = await database.fetch_one(query)
     if result:
         return result
+
+
+async def authenticate_user(email: str, password: str):
+    logger.debug("Authenticating user", extra={"email": email})
+    user = await get_user(email)
+    if not user:
+        raise credentials_exception
+    if not verify_password(password, user.password):
+        raise credentials_exception
+    return user
