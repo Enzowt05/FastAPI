@@ -54,3 +54,6 @@ async def test_authenticate_user_not_found():
 async def test_authenticate_user_wrong_password(registered_user: dict):
     with pytest.raises(security.HTTPException):
         await security.authenticate_user(registered_user["email"], "wrong password")
+
+@pytest.amrk.anyio
+async def test
