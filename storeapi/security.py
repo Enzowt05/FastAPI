@@ -1,7 +1,7 @@
 import datetime
 import logging
 
-from fastapi import HTTPException, status
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
@@ -63,23 +63,23 @@ async def authenticate_user(email: str, password: str):
     return user
 
 
-async def get_current_user(token: str):
+async def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, key=SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("sub")
         if email is None:
             raise credentials_exception
-
-    except ExpiredSignatureError as e:
+        
+    except ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail={"token has expired"},
+            detail="Token has expired",
             headers={"WWW-Authenticate": "Bearer"},
-        ) from e
-    except JWTError as e:
-        raise credentials_exception from e
+        )
+    except JWTError:
+        raise credentials_exception
 
-    user = await get_user(email=email)
+    user = await get_user(email)
     if user is None:
         raise credentials_exception
     return user
