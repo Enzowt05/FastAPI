@@ -20,14 +20,14 @@ credentials_exception = HTTPException(
 )
 
 
-def acess_token_expire_minutes() -> int:
+def access_token_expire_minutes() -> int:
     return 30
 
 
-def create_acess_token(email: str):
-    logger.debug("Creating acess token", extra={"email": email})
+def create_access_token(email: str):
+    logger.debug("Creating access token", extra={"email": email})
     expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-        minutes=acess_token_expire_minutes()
+        minutes=access_token_expire_minutes()
     )
     jwt_data = {"sub": email, "exp": expire}
     encoded_jwt = jwt.encode(jwt_data, key=SECRET_KEY, algorithm=ALGORITHM)

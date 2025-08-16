@@ -6,7 +6,7 @@ from storeapi.database import database, user_table
 from storeapi.models.user import UserIn
 from storeapi.security import (
     authenticate_user,
-    create_acess_token,
+    create_access_token,
     get_password_hash,
     get_user,
 )
@@ -35,5 +35,5 @@ async def register(user: UserIn):
 @router.post("/token")
 async def login(user: UserIn):
     user = await authenticate_user(user.email, user.password)
-    acess_token = create_acess_token(user.email)
-    return {"acess_token": acess_token, "token_type": "bearer"}
+    access_token = create_access_token(user.email)
+    return {"access_token": access_token, "token_type": "bearer"}
