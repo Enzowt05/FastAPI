@@ -42,3 +42,8 @@ async def test_authenticate_user(registered_user: dict):
         registered_user["email"], registered_user["password"]
     )
     assert user.email == registered_user["email"]
+
+@pytest.mark.anyio
+async def test_authenticate_user_not_found():
+    with pytest.raises(security.HTTPException):
+        await security.authenticate_user("test@example.net", "123")
