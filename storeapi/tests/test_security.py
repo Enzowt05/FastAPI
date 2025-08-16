@@ -1,7 +1,10 @@
 import pytest
-
+from jose import jwt
 from storeapi import security
 
+@pytest.mark.anyio
+async def test_access_token_expire_minutes():
+    assert security.access_token_expire_minutes() == 30
 
 @pytest.mark.anyio
 async def test_password_hashes():
