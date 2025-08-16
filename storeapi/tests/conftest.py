@@ -35,7 +35,7 @@ async def async_client(client) -> AsyncGenerator:
 
 
 @pytest.fixture()
-async def registed_user(async_client: AsyncClient) -> dict:
+async def registered_user(async_client: AsyncClient) -> dict:
     user_details = {"email": "test@example.net", "password": "123"}
     await async_client.post("/register", json=user_details)
     query = user_table.select().where(user_table.c.email == user_details["email"])
