@@ -2,10 +2,12 @@ import logging
 
 from fastapi import APIRouter, HTTPException, Request
 
-from storeapi.database import comment_table, database, post_table
+from storeapi.database import comment_table, database, like_table, post_table
 from storeapi.models.post import (
     Comment,
     CommentIn,
+    PostLike,
+    PostLikeIn,
     UserPost,
     UserPostIn,
     UserPostWithComments,
@@ -71,3 +73,22 @@ async def get_post_with_comments(post_id: int):
         raise HTTPException(status_code=404, detail="Post not found.")
 
     return {"post": post, "comments": await get_comments_on_posts(post_id)}
+
+
+@router.post("/like", response_model=PostLike, status_code=201)
+async def like_post(
+    like: PostLikeIn,
+    request: Request,
+):
+    current_user: User = await get_current_user(await oauth2_scheme(request))  # noqa
+    logger.info("Liking post")
+    post = await find_post(like.post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found.")
+
+    data = {**like.model_dump(), "user_id": current_user.id}
+    query = like_table.insert().values(data)
+    logger.debug(query)
+
+    last_record_id = await database.execute(query)
+    return {**data, "id": last_record_id}
