@@ -1,7 +1,8 @@
 import logging
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter,BackgroundTasks, HTTPException, Request, status
 
+from storeapi import tasks
 from storeapi.database import database, user_table
 from storeapi.models.user import UserIn
 from storeapi.security import (
@@ -19,7 +20,7 @@ router = APIRouter()
 
 
 @router.post("/register", status_code=201)
-async def register(user: UserIn, request: Request):
+async def register(user: UserIn,background_tasks:BackgroundTasks, request: Request):
     if await get_user(user.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -31,11 +32,14 @@ async def register(user: UserIn, request: Request):
     logger.debug(query)
 
     await database.execute(query)
-    return {
-        "detail": "User created. Please confirm your email.",
-        "confirmation_url": request.url_for(
+    background_tasks.add_task(tasks.send_user_registration_email,
+        user.email,
+        confirmation_url=request.url_for(
             "confirm_email", token=create_confirmation_token(user.email)
         ),
+    )
+    return {
+        "detail": "User created. Please confirm your email."
     }
 
 
