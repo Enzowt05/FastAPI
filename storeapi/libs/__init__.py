@@ -1,7 +1,7 @@
 import logging
 from functools import lru_cache
 
-import b2sdk as b2
+from b2sdk.v1 import B2Api, InMemoryAccountInfo
 
 from storeapi.config import config
 
@@ -9,17 +9,17 @@ logger = logging.getLogger(__name__)
 
 
 @lru_cache()
-def b2_api():
-    logger.debug("Creating and Authorazing B2 API")
-    info = b2.InMemoryAccountInfo()
-    b2_api = b2.B2Api(info)
+def b2_api() -> B2Api:
+    logger.debug("Creating and Authorizing B2 API")
+    info = InMemoryAccountInfo()
+    b2_api = B2Api(info)
 
     b2_api.authorize_account("production", config.B2_KEY_ID, config.B2_APPLICATION_KEY)
     return b2_api
 
 
 @lru_cache()
-def b2_get_bucket(api: b2.B2Api):
+def b2_get_bucket(api: B2Api):
     return api.get_bucket_by_name(config.B2_BUCKET_NAME)
 
 
