@@ -12,3 +12,5 @@ python-jose
 python-multipart
 passlib[bcrypt]
 httpx==0.23.3
+aiofiles
+b2sdk
